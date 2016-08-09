@@ -1,4 +1,4 @@
-from prometheus_client import Counter
+from prometheus_client import Counter, Histogram
 
 
 connections_total = Counter(
@@ -29,3 +29,8 @@ errors_total = Counter(
     'django_db_errors_total',
     ('Counter of execution errors by database, vendor and exception type.'),
     ['alias', 'vendor', 'type'])
+
+query_time = Histogram(
+    'django_db_query_time',
+    'Time spent on database queries',
+    ['alias', 'vendor'])

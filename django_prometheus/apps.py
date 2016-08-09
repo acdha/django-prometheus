@@ -1,8 +1,10 @@
 from django.apps import AppConfig
-from django_prometheus.exports import SetupPrometheusExportsFromConfig
-from django_prometheus.migrations import ExportMigrations
+
 # unused import to force instantiating the metric objects at startup.
 import django_prometheus
+from django_prometheus.db.patches import install_db_patches
+from django_prometheus.exports import SetupPrometheusExportsFromConfig
+from django_prometheus.migrations import ExportMigrations
 
 
 class DjangoPrometheusConfig(AppConfig):
@@ -18,5 +20,10 @@ class DjangoPrometheusConfig(AppConfig):
         which shouldn't be done for real monitoring (since these jobs
         are usually short-lived), but can be useful for debugging.
         """
+
+        from . import signals
+
         SetupPrometheusExportsFromConfig()
         ExportMigrations()
+
+        install_db_patches()
